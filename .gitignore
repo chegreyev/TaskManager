@@ -1,0 +1,5 @@
+.env
+.idea/
+api/migrations/
+*.pyc
+db.sqlite3
