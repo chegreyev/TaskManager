@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from dotenv import load_dotenv
+from celery.schedules import crontab
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -144,8 +145,16 @@ EMAIL_HOST_USER = 'chegreyev@gmail.com'
 EMAIL_HOST_PASSWORD = os.getenv('SMTP_PASSWORD')
 EMAIL_PORT = 587
 
+
 REDIS_HOST = '127.0.0.1'
 REDIS_PORT = '6379'
 BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_TIMEZONE = 'Asia/Almaty'
+CELERY_BEAT_SCHEDULE = {
+    'send-notification-to-users': {
+        'task': 'api.tasks.expire_notify',
+        'schedule': crontab(day_of_week=1, hour=12),
+    }
+}
