@@ -1,22 +1,25 @@
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
-# from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Task, ChangingStatus, Reminder
 from .serializers import TaskSerializer, ChangingStatusSerializer, ReminderSerializer, UserSerializer
 
 
 class UserViewSet(ModelViewSet):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
 
 class TaskViewSet(ModelViewSet):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = TaskSerializer
-    queryset = Task.objects.all()
+    # queryset = Task.objects.all()
+
+    def get_queryset(self):
+        return Task.objects.filter(performer=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -27,9 +30,11 @@ class TaskViewSet(ModelViewSet):
 
 
 class ChangingStatusViewSet(ModelViewSet):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = ChangingStatusSerializer
-    queryset = ChangingStatus.objects.all()
+
+    def get_queryset(self):
+        return ChangingStatus.objects.filter(task__performer=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -46,6 +51,6 @@ class ChangingStatusViewSet(ModelViewSet):
 
 
 class ReminderViewSet(ModelViewSet):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = ReminderSerializer
     queryset = Reminder.objects.all()

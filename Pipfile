@@ -13,6 +13,7 @@ django-extensions = "*"
 celery = "*"
 redis = "*"
 django-configurations = "*"
+djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "3.8"
