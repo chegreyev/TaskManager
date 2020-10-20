@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'django_extensions',
     'api',
 
@@ -127,8 +128,9 @@ STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
 
@@ -139,7 +141,7 @@ SHELL_PLUS_SUBCLASSES_IMPORT = ['api.serializers.TaskSerializer', 'api.serialize
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'chegreyev@gmail.com'
-EMAIL_HOST_PASSWORD = 'hopciz-8sirrA-dunfub'
+EMAIL_HOST_PASSWORD = os.getenv('SMTP_PASSWORD')
 EMAIL_PORT = 587
 
 REDIS_HOST = '127.0.0.1'
