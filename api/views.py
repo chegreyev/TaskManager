@@ -8,7 +8,7 @@ from .serializers import TaskSerializer, ChangingStatusSerializer, ReminderSeria
 
 
 class UserViewSet(ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -39,13 +39,13 @@ class ChangingStatusViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         # Task data
-        task = Task.objects.get(id=int(request.data['task']))
-        task_serializer = TaskSerializer(task)
+        obj = Task.objects.get(id=int(request.data['task']))
+        task_serializer = TaskSerializer(obj)
         data = task_serializer.data
         if serializer.is_valid():
             serializer.save(previous_status=data['status'], changed_by=request.user)
 
-            task_serializer.update(task, {'status' : request.data['next_status']})
+            task_serializer.update(obj, {'status' : request.data['next_status']})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

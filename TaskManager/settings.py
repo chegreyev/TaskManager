@@ -83,8 +83,12 @@ WSGI_APPLICATION = 'TaskManager.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'hello_django_dev',
+        "USER": 'hello_django',
+        "PASSWORD": 'hello_django',
+        "HOST": 'db',
+        "PORT": '5432',
     }
 }
 
@@ -113,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Almaty'
 
 USE_I18N = True
 
@@ -146,11 +150,11 @@ EMAIL_HOST_PASSWORD = os.getenv('SMTP_PASSWORD')
 EMAIL_PORT = 587
 
 
-REDIS_HOST = '127.0.0.1'
+REDIS_HOST = '0.0.0.0'
 REDIS_PORT = '6379'
-BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_URL = 'redis://' + 'redis' + ':' + REDIS_PORT + '/0'
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
-CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_RESULT_BACKEND = 'redis://' + 'redis' + ':' + REDIS_PORT + '/0'
 CELERY_TIMEZONE = 'Asia/Almaty'
 CELERY_BEAT_SCHEDULE = {
     'send-notification-to-users': {
