@@ -13,7 +13,7 @@ class Task(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     performer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='performers')
-    observer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='observers')
+    observers = models.ManyToManyField(User)
     status = models.CharField(
         max_length=8,
         choices=TaskStatus.choices
@@ -21,6 +21,9 @@ class Task(models.Model):
     started_at = models.DateField(auto_now=True)
     planning_completed_at = models.DateField(null=True)
     completed_at = models.DateField(null=True)
+
+    def __str__(self):
+        return self.title
 
 
 class ChangingStatus(models.Model):

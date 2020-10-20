@@ -21,6 +21,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+    path('rest-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # path('api/token/', TokenObtainPairView.as_view()),
     # path('api/token/refresh/', TokenRefreshView.as_view()),
     # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),

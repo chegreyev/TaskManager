@@ -18,6 +18,13 @@ class TaskViewSet(ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save(performer=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ChangingStatusViewSet(ModelViewSet):
     # permission_classes = (IsAuthenticated,)
@@ -34,7 +41,7 @@ class ChangingStatusViewSet(ModelViewSet):
             serializer.save(previous_status=data['status'], changed_by=request.user)
 
             task_serializer.update(task, {'status' : request.data['next_status']})
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
